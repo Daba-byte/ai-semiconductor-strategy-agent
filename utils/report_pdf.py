@@ -15,6 +15,8 @@ from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.lib.units import mm
+from reportlab.platypus import Table, TableStyle
+from reportlab.lib import colors
 
 
 # ======================
@@ -151,27 +153,90 @@ def create_report_pdf(markdown_text, output_path="outputs/final_report.pdf"):
 
     # 줄 단위 파싱
     lines = clean_text.split("\n")
-    parsed_lines = _parse_lines(lines)
 
-    for kind, text in parsed_lines:
+    i = 0
+    while i < len(lines):
+        line = lines[i].strip()
 
-        if kind == "title":
-            content.append(Paragraph(text, title_style))
+        # ======================
+        # TABLE 처리
+        # ======================
+        if _is_table_line(line):
+            table_lines = []
+
+            while i < len(lines) and _is_table_line(lines[i]):
+                table_lines.append(lines[i])
+                i += 1
+
+            table_data = _parse_markdown_table(table_lines)
+
+            if table_data:
+                content.append(_create_table(table_data, font_name))
+                content.append(Spacer(1, 10))
+
+            continue
+
+        # ======================
+        # 기존 텍스트 처리
+        # ======================
+        if not line:
+            content.append(Spacer(1, 6))
+
+        elif line.upper().startswith("SUMMARY"):
+            content.append(Paragraph(line, title_style))
             content.append(Spacer(1, 10))
 
-        elif kind == "heading":
-            content.append(Paragraph(text, heading_style))
+        elif line.startswith("##"):
+            content.append(Paragraph(line.replace("##", ""), heading_style))
             content.append(Spacer(1, 6))
 
-        elif kind == "bullet":
-            content.append(Paragraph(f"• {text}", bullet_style))
+        elif line.startswith("- "):
+            content.append(Paragraph(f"• {line[2:]}", bullet_style))
 
-        elif kind == "body":
-            content.append(Paragraph(text, body_style))
+        else:
+            content.append(Paragraph(line, body_style))
 
-        elif kind == "space":
-            content.append(Spacer(1, 6))
+        i += 1
 
     doc.build(content)
 
     print(f"[PDF] 생성 완료: {output_path}")
+
+# ======================
+# 6. 표 생성
+# ======================
+def _is_table_line(line: str) -> bool:
+    return "|" in line and line.strip().startswith("|")
+
+def _parse_markdown_table(lines):
+    table_data = []
+
+    for line in lines:
+        if not _is_table_line(line):
+            continue
+
+        row = [cell.strip() for cell in line.strip().strip("|").split("|")]
+        table_data.append(row)
+
+    # 구분선 제거 (----)
+    if len(table_data) > 1 and all("---" in cell for cell in table_data[1]):
+        table_data.pop(1)
+
+    return table_data
+
+def _create_table(table_data, font_name):
+    table = Table(table_data, repeatRows=1)
+
+    table.setStyle(TableStyle([
+        ("FONTNAME", (0,0), (-1,-1), font_name),
+
+        ("BACKGROUND", (0,0), (-1,0), colors.darkblue),
+        ("TEXTCOLOR", (0,0), (-1,0), colors.white),
+
+        ("GRID", (0,0), (-1,-1), 0.5, colors.grey),
+
+        ("ALIGN", (0,0), (-1,-1), "CENTER"),
+        ("VALIGN", (0,0), (-1,-1), "MIDDLE"),
+    ]))
+
+    return table
