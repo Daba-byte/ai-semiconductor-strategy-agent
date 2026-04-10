@@ -1,7 +1,6 @@
 """샘플 Retriever 평가 실행 파일.
 
 현재는 작은 예시 QA set으로 성능 계산 과정을 보여주는 용도다.
-나중에 실제 과제 QA set으로 교체하면 그대로 재사용 가능하다.
 """
 from __future__ import annotations
 
