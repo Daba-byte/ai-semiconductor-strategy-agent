@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # ======================
-# QA SET (직접 만든다)
+# QA SET
 # ======================
 qa_set = [
     {
