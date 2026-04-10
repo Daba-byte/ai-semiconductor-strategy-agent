@@ -110,6 +110,23 @@ python3 app.py
 - outputs/run_context.json
 
 ---
+## Retrieval Evaluation
+
+본 프로젝트에서는 Retrieval 성능을 정량적으로 평가하기 위해 Hit Rate@K와 MRR을 사용하였다.  
+직접형 질문과 추론형 질문을 혼합한 QA 세트를 기반으로 평가를 수행하였다.
+
+| Metric        | Score |
+|---------------|------|
+| Hit Rate@5    | 0.88 |
+| MRR           | 0.68 |
+
+- **Hit Rate@5**: Top-5 내 정답 문서 포함 비율
+- **MRR (Mean Reciprocal Rank)**: 정답 문서의 평균 순위 역수
+
+본 결과는 단순 키워드 매칭을 넘어 문맥 기반 검색 성능이 효과적으로 작동함을 보여준다.
+
+---
+
 
 ## Contributors
 
