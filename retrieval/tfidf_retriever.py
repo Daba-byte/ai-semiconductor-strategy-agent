@@ -1,7 +1,6 @@
 """오프라인 데모용 간단한 키워드 기반 Retriever.
 
 scikit-learn 같은 외부 의존성 없이도 실행되도록 직접 구현한 버전이다.
-실제 과제에서는 이 자리를 FAISS, BM25, Hybrid Retrieval 등으로 교체하면 된다.
 """
 from __future__ import annotations
 
