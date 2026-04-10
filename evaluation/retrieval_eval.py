@@ -93,8 +93,13 @@ def evaluate_retrieval(agent, qa_set, k=5):
         results = agent.run(query=qa["question"], k=k)
 
         found = False
+        print("\n====================")
+        print("Q:", qa["question"])
+        print("Top-K Docs:")
 
         for idx, doc in enumerate(results):
+            preview = doc.page_content[:100].replace("\n", " ")
+            print(f"{idx+1}. {preview}")
             if any(keyword.lower() in doc.page_content.lower() for keyword in qa["keywords"]):
                 hit += 1
                 mrr += 1 / (idx + 1)
@@ -102,7 +107,9 @@ def evaluate_retrieval(agent, qa_set, k=5):
                 break
 
         if not found:
-            mrr += 0
+            print("❌ FAIL")
+        else:
+            print("✅ HIT")
 
     hit_rate = hit / len(qa_set)
     mrr_score = mrr / len(qa_set)

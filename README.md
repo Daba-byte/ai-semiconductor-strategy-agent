@@ -124,9 +124,16 @@ python3 app.py
 - **MRR (Mean Reciprocal Rank)**: 정답 문서의 평균 순위 역수
 
 본 결과는 단순 키워드 매칭을 넘어 문맥 기반 검색 성능이 효과적으로 작동함을 보여준다.
-
 ---
+### Error Analysis
 
+일부 실패 케이스는 다음과 같은 원인으로 발생하였다:
+
+- 특정 기술의 TRL 수준과 같은 정보는 명시적으로 문서에 포함되지 않아 keyword 기반 retrieval에서 탐지되지 않음
+- 복수 기술 간 비교(예: HBM vs PIM 성숙도)는 단일 문서 retrieval로 해결하기 어려운 추론형 문제임
+
+이는 Retrieval 기반 시스템의 한계로, 향후 LLM 기반 reasoning 단계와의 결합이 필요함을 시사한다.
+---
 
 ## Contributors
 
