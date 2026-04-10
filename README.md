@@ -39,7 +39,7 @@ AI Agentic Workflow 시스템입니다.
 |------------|--------|
 | Framework  | LangChain, Python |
 | LLM        | OpenAI GPT-4o-mini |
-| Retrieval  | FAISS |
+| Retrieval  | FAISS(0.88, 0.68) |
 | Embedding  | OpenAI Embeddings |
 | Search     | Tavily API |
 | PDF        | ReportLab |
